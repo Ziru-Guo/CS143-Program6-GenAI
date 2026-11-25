@@ -19,6 +19,10 @@ class Contact {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public String toString() {
         return "Name: " + name + " | Phone: " + phoneNumber;
@@ -47,12 +51,28 @@ public class ContactBook {
                 case "1":
                     System.out.print("Enter name: ");
                     String name = scanner.nextLine().trim();
-                    System.out.print("Enter phone number: ");
-                    String phone = scanner.nextLine().trim();
+                    String key = name.toLowerCase();
 
-                    // Store using lowercase key for case-insensitive lookup
-                    contacts.put(name.toLowerCase(), new Contact(name, phone));
-                    System.out.println("Contact saved!");
+                    if (contacts.containsKey(key)) {
+                        Contact existing = contacts.get(key);
+                        System.out.println("Contact already exists -> " + existing);
+                        System.out.print("Do you want to update the phone number? (y/n): ");
+                        String confirm = scanner.nextLine().trim().toLowerCase();
+
+                        if (confirm.equals("y") || confirm.equals("yes")) {
+                            System.out.print("Enter new phone number: ");
+                            String newPhone = scanner.nextLine().trim();
+                            existing.setPhoneNumber(newPhone);
+                            System.out.println("Contact updated!");
+                        } else {
+                            System.out.println("Update cancelled.");
+                        }
+                    } else {
+                        System.out.print("Enter phone number: ");
+                        String phone = scanner.nextLine().trim();
+                        contacts.put(key, new Contact(name, phone));
+                        System.out.println("Contact saved!");
+                    }
                     break;
 
                 case "2":
