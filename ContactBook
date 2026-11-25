@@ -31,6 +31,19 @@ class Contact {
 
 // 2. Main class to run the console menu
 public class ContactBook {
+
+    // Helper method to keep prompting until the user enters non-empty text
+    private static String getNonEmptyInput(Scanner scanner, String prompt, String errorMessage) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            System.out.println(errorMessage);
+        }
+    }
+
     public static void main(String[] args) {
         HashMap<String, Contact> contacts = new HashMap<>();
         Scanner scanner = new Scanner(System.in);
@@ -49,8 +62,11 @@ public class ContactBook {
 
             switch (choice) {
                 case "1":
-                    System.out.print("Enter name: ");
-                    String name = scanner.nextLine().trim();
+                    String name = getNonEmptyInput(
+                        scanner,
+                        "Enter name: ",
+                        "Error: Name cannot be empty. Please try again."
+                    );
                     String key = name.toLowerCase();
 
                     if (contacts.containsKey(key)) {
@@ -60,16 +76,22 @@ public class ContactBook {
                         String confirm = scanner.nextLine().trim().toLowerCase();
 
                         if (confirm.equals("y") || confirm.equals("yes")) {
-                            System.out.print("Enter new phone number: ");
-                            String newPhone = scanner.nextLine().trim();
+                            String newPhone = getNonEmptyInput(
+                                scanner,
+                                "Enter new phone number: ",
+                                "Error: Phone number cannot be empty. Please try again."
+                            );
                             existing.setPhoneNumber(newPhone);
                             System.out.println("Contact updated!");
                         } else {
                             System.out.println("Update cancelled.");
                         }
                     } else {
-                        System.out.print("Enter phone number: ");
-                        String phone = scanner.nextLine().trim();
+                        String phone = getNonEmptyInput(
+                            scanner,
+                            "Enter phone number: ",
+                            "Error: Phone number cannot be empty. Please try again."
+                        );
                         contacts.put(key, new Contact(name, phone));
                         System.out.println("Contact saved!");
                     }
